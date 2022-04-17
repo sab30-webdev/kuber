@@ -1,37 +1,35 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-blue-whale
+  name: nginx-deployment
+  labels:
+    app: nginx
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
-      app: hello-blue-whale-app
+      app: nginx
   template:
     metadata:
-      name: hello-blue-whale-pod
       labels:
-        app: hello-blue-whale-app
+        app: nginx
     spec:
       containers:
-        - name: hello-blue-whale-container
-          image: vamsijakkula/hello-blue-whale:v1
-          imagePullPolicy: Always
+        - name: nginx
+          image: nginxdemos/hello:plain-text
           ports:
             - containerPort: 80
-      imagePullSecrets:
-        - name: regcred
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: hello-blue-whale-svc
+  name: nginx
   labels:
     app: hello-blue-whale-app
 spec:
   selector:
-    app: hello-blue-whale-app
+    app: nginx
   type: LoadBalancer
   ports:
     - port: 80
